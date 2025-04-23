@@ -1,5 +1,6 @@
 
 const gameBoard = (function(){
+    //tiles have the owner player if any and its location in the array
     function createTile(xin,yin){
         let playerOwn=""
 
@@ -10,8 +11,9 @@ const gameBoard = (function(){
             return [xin,yin]
         };
         getOwner = () =>{return playerOwn}
-        return {getLocation,setOwner}
+        return {getLocation,setOwner,getOwner}
     };
+    //below fuctions makes the array
     let board=[];
     (function(){
         for (let i= 0; i < 3; i++) {
