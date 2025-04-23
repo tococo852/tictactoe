@@ -1,19 +1,27 @@
-const gameBoard = (function(){
-    const tile=(function(){
-        let neighboars=[];
-        let x,y;
-        createTile= (xin,yin) =>{
-            [x,y]=[xin,yin]
 
+const gameBoard = (function(){
+    function createTile(xin,yin){
+        let playerOwn=""
+
+
+        setOwner=(player)=>{
+            playerOwn=player}
+        getLocation= () =>{
+            return [xin,yin]
         };
-        createCenter
-        coordinates= () =>{
-            return [x,y]
-        };
-        return {coordinates,createTile }
+        getOwner = () =>{return playerOwn}
+        return {getLocation,setOwner}
+    };
+    let board=[];
+    (function(){
+        for (let i= 0; i < 3; i++) {
+            board.push([]);
+            for(let c=0; c<3; c++){
+                board[i].push(createTile(i,c))
+            }  
+        }
     })();
 
-    board=[['11','12','13'],['21','22','23'],['31','32','33']]
 
     const modifyTile= (mark, x, y) => {board[x][y]=mark;};
     const calculateWin= () => {
@@ -25,7 +33,7 @@ const gameBoard = (function(){
         });
         
     };
-    return {modifyTile,calculateWin}
+    return {modifyTile,calculateWin,createTile,board}
 })();
 
 gameBoard.calculateWin();
