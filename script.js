@@ -2,11 +2,11 @@
 const gameBoard = (function(){
     //tiles have the owner player if any and its location in the array
     function createTile(xin,yin){
-        let playerOwn=""
+        let playerOwn=NaN
 
 
-        setOwner=(player)=>{
-            playerOwn=player}
+        setOwner=(playerName)=>{
+            playerOwn=playerName}
         getLocation= () =>{
             return [xin,yin]
         };
@@ -25,7 +25,8 @@ const gameBoard = (function(){
     })();
 
 
-    const modifyTile= (mark, x, y) => {board[x][y]=mark;};
+    const modifyTile= (player, x, y) => {board[x][y].setPlayer(player);};
+
     const calculateWin= () => {
         board.forEach( (row,x)=> {
                 row.forEach((_,y) => {
@@ -38,4 +39,17 @@ const gameBoard = (function(){
     return {modifyTile,calculateWin,createTile,board}
 })();
 
+function CreatePlayer(name){
+    wins=0;
+    ties=0;
+    losses=0;
+    const increaseWins= () =>{wins++}
+    const getWins= () => {wins}
+    const increaseTies= () =>{ties++}
+    const getTies= () => {ties}
+    const increseLosses= () =>{losses++}
+    const getLosses= () => {losses}
+    const getTotalGames = () =>{losses+wins+wins}
+    return {name,increaseWins,getWins,increaseTies,getTies,increseLosses,getLosses,getTotalGames}
+}
 gameBoard.calculateWin();
