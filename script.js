@@ -8,10 +8,10 @@ function createPlayer(name,symbol){
     const getWins= () => {return wins}
     const increaseTies= () =>{ties++}
     const getTies= () => {return ties}
-    const increseLosses= () =>{losses++}
+    const increaseLosses= () =>{losses++}
     const getLosses= () => {return losses}
     const getTotalGames = () =>{return losses+wins+wins}
-    return {increaseWins,getWins,increaseTies,getTies,increseLosses,getLosses,getTotalGames,getName,getSymbol}
+    return {increaseWins,getWins,increaseTies,getTies,increaseLosses,getLosses,getTotalGames,getName,getSymbol}
 }
 
 const gameBoard = (function(){
@@ -87,13 +87,73 @@ const gameBoard = (function(){
 })();
 
 //next, make game object, should carry all game logic and interaction beetwen player and board
-gameBoard.generateBoard()
-player1=createPlayer("Player1", "O")
-player2=createPlayer("player2", "X")
-gameBoard.setTile(player1,0,0)
-gameBoard.setTile(player1,1,1)
-gameBoard.setTile(player1,2,2)
-console.log(player1.getSymbol())
+const game = (function (){
+    gameBoard.generateBoard()
+    let player1=createPlayer("player1", "O")
+    let player2=createPlayer("player2", "X")
+    let currentTurn=0;
+    let currentPlayer=player1
+    let gameState= true
+    let tie= false
+    const nextTurn = () =>{
+        currentTurn++;
+        if (currentPlayer==player1) {
+            currentPlayer=player2
+        }
+        else{
+            currentPlayer=player1
+        }
+    }
+    
+    const playTurn=()=>{
+        console.log(`is turn ${currentTurn}, ${currentPlayer.getName()} time to pick a tile`)
+        let x= parseInt( prompt("what is X"))
+        let y= parseInt(prompt("what is Y"))
+        gameBoard.setTile(currentPlayer, x, y)
+        if (currentTurn>3){
+            if(gameBoard.checkWin()){
+                gameState=false
+            }
+            if(currentTurn>=8 && !gameBoard.checkWin()){
+                gameState=false
+                tie=true
+            }
+        }
+        gameBoard.displayGrid()
+        nextTurn();
+    }
+    const newGame = () =>{
+        gameState = true
+        tie = false
+        currentTurn=0
+        currentPlayer=player1
+    }
+    const gameResult=()=>{
+        if(tie){
+            console.log(`game is a tie, no winners`)
+            player1.increaseTies();
+            player2.increaseTies();
+        }
+        else{
+            console.log(`there is a winner! ${gameBoard.getWinningLine()[0].getOwner()}`)
+            if(gameBoard.getWinningLine()[0].getOwner()=='player1'){
+                player1.increaseWins()
+                player2.increaseLosses()
+            }
+            else{
+                player2.increaseWins()
+                player1.increaseLosses()
+            }
+        }
+    }
+    const gameLoop=()=>{
+        while (gameState){
+            playTurn()
+        }
+        gameResult()
 
-console.log(gameBoard.getBoard()[0][0].getOwner())
-gameBoard.displayGrid();
+        
+    }
+    return {gameLoop, newGame}
+})();
+
