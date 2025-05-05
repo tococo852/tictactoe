@@ -64,10 +64,21 @@
   .header{
     display: flex;
     justify-content: space-around;
+    text-align: center;
   }
   .scoreboard{
     background-color: rgb(85, 83, 83);
     width: 20%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 5px;
+  }
+  .p1Score, .p2Score{
+    padding: 1px 10px;
+    background-color: blanchedalmond;
+    border-radius: 10px;
+    text-align: center;
   }
   .player1, .player2{
     width: 40%;
@@ -88,5 +99,11 @@
   .p1Banner, .p2Banner{
     width: 10%;
     height: 100%;
+  }
+
+  .gameArea{
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
   }
 
