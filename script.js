@@ -1,9 +1,10 @@
-function createPlayer(name,symbol){
+function createPlayer(name,symbol,symbolSVG){
     wins=0;
     ties=0;
     losses=0;
     const getName= () => {return name}
     const getSymbol= () => {return symbol}
+    const getSymbolSVG= () => {return symbol}
     const increaseWins= () =>{wins++}
     const getWins= () => {return wins}
     const increaseTies= () =>{ties++}
@@ -11,7 +12,7 @@ function createPlayer(name,symbol){
     const increaseLosses= () =>{losses++}
     const getLosses= () => {return losses}
     const getTotalGames = () =>{return losses+wins+wins}
-    return {increaseWins,getWins,increaseTies,getTies,increaseLosses,getLosses,getTotalGames,getName,getSymbol}
+    return {increaseWins,getWins,increaseTies,getTies,increaseLosses,getLosses,getTotalGames,getName,getSymbol,getSymbolSVG}
 }
 
 const gameBoard = (function(){
@@ -89,8 +90,14 @@ const gameBoard = (function(){
 //next, make game object, should carry all game logic and interaction beetwen player and board
 const game = (function (){
     gameBoard.generateBoard()
-    let player1=createPlayer("player1", "O")
-    let player2=createPlayer("player2", "X")
+    let cross = `<svg fill="#4141db" width="6rem" height="8rem" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 14.545L1.455 16 8 9.455 14.545 16 16 14.545 9.455 8 16 1.455 14.545 0 8 6.545 1.455 0 0 1.455 6.545 8z" fill-rule="evenodd"/>
+</svg>`
+    let circle=`<svg width="8rem" height="8rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#db4141" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`
+    let player1=createPlayer("player1", "O",circle)
+    let player2=createPlayer("player2", "X",cross)
     let currentTurn=0;
     let currentPlayer=player1
     let gameState= true
