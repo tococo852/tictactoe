@@ -100,10 +100,28 @@
     width: 10%;
     height: 100%;
   }
-
+  .centerBox{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .announcementBox{
+    font-size: 4rem;
+  }
   .gameArea{
-    border-color: black;
-    border-style: solid;
-    border-width: 1px;
+    background-color: black;
+    display: grid;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr) ;
+    gap: 1px;
   }
 
+  .tile{
+    height: 10rem;
+    width: 10rem;
+    background-color: rgb(251, 251, 251);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }

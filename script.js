@@ -157,3 +157,25 @@ const game = (function (){
     return {gameLoop, newGame}
 })();
 
+(function(window, document) {
+
+    // code that should be taken care of right away
+    let cross = `<svg fill="#4141db" width="6rem" height="8rem" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 14.545L1.455 16 8 9.455 14.545 16 16 14.545 9.455 8 16 1.455 14.545 0 8 6.545 1.455 0 0 1.455 6.545 8z" fill-rule="evenodd"/>
+</svg>`
+
+    let circle=`<svg width="8rem" height="8rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#db4141" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`
+    window.onload = init;
+  
+    function init(){
+        let tile00=document.getElementById('00')
+        let tile01=document.getElementById("01")
+        tile00.innerHTML=cross
+        tile01.innerHTML=circle
+        console.log(tile00)
+    }
+  
+  })(window, document);
+  
