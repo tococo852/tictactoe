@@ -4,7 +4,7 @@ function createPlayer(name,symbol,symbolSVG){
     losses=0;
     const getName= () => {return name}
     const getSymbol= () => {return symbol}
-    const getSymbolSVG= () => {return symbol}
+    const getSymbolSVG= () => {return symbolSVG}
     const increaseWins= () =>{wins++}
     const getWins= () => {return wins}
     const increaseTies= () =>{ties++}
@@ -18,6 +18,7 @@ function createPlayer(name,symbol,symbolSVG){
 const gameBoard = (function(){
     //tiles have the owner player if any and its location in the array
     winningLine=[]
+
     function createTile(xin,yin){
         let playerOwn=NaN
         let playerIcon="?"
@@ -41,7 +42,7 @@ const gameBoard = (function(){
         for (let i= 0; i < 3; i++) {
             board.push([]);
             for(let c=0; c<3; c++){
-                board[i].push(createTile(i,c))
+                board[i].push(createTile(i.toString(),c.toString()))
             }  
         }
     };
@@ -84,7 +85,19 @@ const gameBoard = (function(){
         
     };
     const getWinningLine= () =>{return winningLine}
-    return {getBoard,getTile,setTile,checkWin,displayGrid, generateBoard,getWinningLine}
+
+    const renderBoard=()=> {
+        board.forEach((val)=>{val.forEach((tile)=>{
+            tileCard=document.getElementById(tile.getLocation()[0]+tile.getLocation()[1])
+            if(tile.getIcon()!='?'){
+                //tileCard.innerHTML=tile.getOwner().getSymbolSVG()
+                console.log(tile.getOwner())
+            }
+        })})
+    }
+    return {renderBoard,getBoard,getTile,setTile,checkWin,displayGrid, generateBoard,getWinningLine}
+
+
 })();
 
 //next, make game object, should carry all game logic and interaction beetwen player and board
@@ -102,6 +115,8 @@ const game = (function (){
     let currentPlayer=player1
     let gameState= true
     let tie= false
+
+
     const nextTurn = () =>{
         currentTurn++;
         if (currentPlayer==player1) {
@@ -112,10 +127,10 @@ const game = (function (){
         }
     }
     
-    const playTurn=()=>{
+    const playTurn=(x,y)=>{
         console.log(`is turn ${currentTurn}, ${currentPlayer.getName()} time to pick a tile`)
-        let x= parseInt( prompt("what is X"))
-        let y= parseInt(prompt("what is Y"))
+        //let x= parseInt( prompt("what is X"))
+        //let y= parseInt(prompt("what is Y"))
         gameBoard.setTile(currentPlayer, x, y)
         if (currentTurn>3){
             if(gameBoard.checkWin()){
@@ -126,7 +141,7 @@ const game = (function (){
                 tie=true
             }
         }
-        gameBoard.displayGrid()
+        gameBoard.renderBoard()
         nextTurn();
     }
     const newGame = () =>{
@@ -161,7 +176,7 @@ const game = (function (){
 
         
     }
-    return {gameLoop, newGame}
+    return {gameLoop, newGame,playTurn}
 })();
 
 (function(window, document) {
@@ -179,10 +194,11 @@ const game = (function (){
     function init(){
         let tile00=document.getElementById('00')
         let tile01=document.getElementById("01")
-        tile00.innerHTML=cross
-        tile01.innerHTML=circle
+        //tile00.innerHTML=cross
+        //tile01.innerHTML=circle
         console.log(tile00)
     }
   
   })(window, document);
   
+  game.playTurn(0,0)
