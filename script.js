@@ -38,7 +38,8 @@ const gameBoard = (function(){
     //below fuctions makes the array board and fills it
     let board=[];
     const generateBoard= () =>{
-        this.board=[]
+        board=[]
+        console.log(board)
         for (let i= 0; i < 3; i++) {
             board.push([]);
             for(let c=0; c<3; c++){
@@ -145,6 +146,8 @@ const game = (function (){
         tie = false
         currentTurn=0
         currentPlayer=player1
+        gameBoard.generateBoard()
+        gameBoard.renderBoard()
     }
     const gameResult=()=>{
         if(tie){
@@ -153,8 +156,8 @@ const game = (function (){
             player2.increaseTies();
         }
         else{
-            console.log(`there is a winner! ${gameBoard.getWinningLine()[0].getOwner()}`)
-            if(gameBoard.getWinningLine()[0].getOwner()=='player1'){
+            console.log(`there is a winner! ${gameBoard.getWinningLine()[0].getOwner().getName()}`)
+            if(gameBoard.getWinningLine()[0].getOwner().getName()=='player1'){
                 player1.increaseWins()
                 player2.increaseLosses()
             }
@@ -172,40 +175,25 @@ const game = (function (){
 
         
     }
-    
+    window.onload = init;
+    function init(){
+
+        gameContainer=document.querySelector('.gameArea')
+        gameContainer.addEventListener('click',(e)=>{
+            let currId =e.target.id
+            if(currId!='' && gameState){
+                coordinates=currId.split('')
+                game.playTurn(coordinates[0],coordinates[1])
+            }
+            if(!gameState){
+
+                }
+        })
+
+    }
+
     return {gameLoop, newGame,playTurn}
 })();
 
-(function(window, document) {
 
-    // code that should be taken care of right away
-    let cross = `<svg fill="#4141db" width="6rem" height="8rem" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 14.545L1.455 16 8 9.455 14.545 16 16 14.545 9.455 8 16 1.455 14.545 0 8 6.545 1.455 0 0 1.455 6.545 8z" fill-rule="evenodd"/>
-</svg>`
-
-    let circle=`<svg width="8rem" height="8rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#db4141" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>`
-    window.onload = init;
-  
-    function init(){
-        //let tile00=document.getElementById('00')
-        //let tile01=document.getElementById("01")
-        gameContainer=document.querySelector('.gameArea')
-        //game.playTurn(0,0)
-        gameContainer.addEventListener('click',(e)=>{
-            let currId =e.target.id
-            if(currId!=''){
-                coordinates=currId.split('')
-
-                game.playTurn(coordinates[0],coordinates[1])
-
-            }
-        })
-        //tile00.innerHTML=cross
-        //tile01.innerHTML=circle
-        //console.log(tile00)
-    }
-  
-  })(window, document);
   
