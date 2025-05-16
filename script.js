@@ -1,7 +1,7 @@
 function createPlayer(name,symbol,symbolSVG){
-    wins=0;
-    ties=0;
-    losses=0;
+    let wins=0;
+    let ties=0;
+    let losses=0;
     const getName= () => {return name}
     const getSymbol= () => {return symbol}
     const getSymbolSVG= () => {return symbolSVG}
@@ -17,7 +17,6 @@ function createPlayer(name,symbol,symbolSVG){
 
 const gameBoard = (function(){
     //tiles have the owner player if any and its location in the array
-    winningLine=[]
 
     function createTile(xin,yin){
         let playerOwn=NaN
@@ -37,9 +36,11 @@ const gameBoard = (function(){
     };
     //below fuctions makes the array board and fills it
     let board=[];
+    let winningLine=[]
+
     const generateBoard= () =>{
         board=[]
-        console.log(board)
+        winningLine=[]
         for (let i= 0; i < 3; i++) {
             board.push([]);
             for(let c=0; c<3; c++){
@@ -88,9 +89,12 @@ const gameBoard = (function(){
         
         board.forEach((val)=>{val.forEach((tile)=>{
             tileCard=document.getElementById(tile.getLocation()[0]+tile.getLocation()[1])
-            console.log(tile.getIcon())
+            //console.log(tile.getIcon())
             if(tile.getIcon()!='?'){
                 tileCard.innerHTML=tile.getOwner().getSymbolSVG()
+            }
+            else{
+                tileCard.innerHTML=''
             }
         })})
     }
@@ -112,6 +116,7 @@ const game = (function (){
     let currentPlayer=player1
     let gameState= true
     let tie= false
+    let gameReady=true
 
 
     const nextTurn = () =>{
@@ -125,7 +130,7 @@ const game = (function (){
     }
     
     const playTurn=(x,y)=>{
-        console.log(`is turn ${currentTurn}, ${currentPlayer.getName()} time to pick a tile`)
+        //console.log(`is turn ${currentTurn}, ${currentPlayer.getName()} time to pick a tile`)
         //let x= parseInt( prompt("what is X"))
         //let y= parseInt(prompt("what is Y"))
         gameBoard.setTile(currentPlayer, x, y)
@@ -144,19 +149,20 @@ const game = (function (){
     const newGame = () =>{
         gameState = true
         tie = false
+        gameReady=false
         currentTurn=0
         currentPlayer=player1
         gameBoard.generateBoard()
         gameBoard.renderBoard()
     }
-    const gameResult=()=>{
+    const gameResult=(annBox)=>{
         if(tie){
-            console.log(`game is a tie, no winners`)
+            annBox.textContent=(`game is a tie, no winners`)
             player1.increaseTies();
             player2.increaseTies();
         }
         else{
-            console.log(`there is a winner! ${gameBoard.getWinningLine()[0].getOwner().getName()}`)
+            annBox.textContent=(`there is a winner! ${gameBoard.getWinningLine()[0].getOwner().getName()}`)
             if(gameBoard.getWinningLine()[0].getOwner().getName()=='player1'){
                 player1.increaseWins()
                 player2.increaseLosses()
@@ -175,24 +181,47 @@ const game = (function (){
 
         
     }
+    const renderScores=()=>{
+        let p1Score=document.querySelector('.p1Score')
+        let p2Score=document.querySelector('.p2Score')
+        p1Score.textContent=player1.getWins()
+        //console.log('p1 wins', player1.getWins())
+        p2Score.textContent=player2.getWins()
+
+    }
+    const renderTurn=(annBox)=>{
+        if(!gameState){
+            gameResult(annBox)
+        }
+        else{
+            annBox.textContent=`Is ${currentPlayer.getName()} Turn`
+        }
+    }
+
     window.onload = init;
     function init(){
-
         gameContainer=document.querySelector('.gameArea')
+        let box=document.querySelector('.announcementBox')
+
         gameContainer.addEventListener('click',(e)=>{
             let currId =e.target.id
-            if(currId!='' && gameState){
+            if(!gameState){
+                gameResult(box)
+                newGame()
+                renderScores()
+                }
+            if(currId!='' && gameState && gameReady){
                 coordinates=currId.split('')
                 game.playTurn(coordinates[0],coordinates[1])
-            }
-            if(!gameState){
 
-                }
+            }
+            gameReady=true
+            
         })
 
     }
 
-    return {gameLoop, newGame,playTurn}
+    return {gameLoop, newGame,playTurn,player1}
 })();
 
 
