@@ -130,9 +130,6 @@ const game = (function (){
     }
     
     const playTurn=(x,y)=>{
-        //console.log(`is turn ${currentTurn}, ${currentPlayer.getName()} time to pick a tile`)
-        //let x= parseInt( prompt("what is X"))
-        //let y= parseInt(prompt("what is Y"))
         gameBoard.setTile(currentPlayer, x, y)
         if (currentTurn>3){
             if(gameBoard.checkWin()){
@@ -173,14 +170,7 @@ const game = (function (){
             }
         }
     }
-    const gameLoop=()=>{
-        while (gameState){
-            playTurn()
-        }
-        gameResult()
 
-        
-    }
     const renderScores=()=>{
         let p1Score=document.querySelector('.p1Score')
         let p2Score=document.querySelector('.p2Score')
@@ -206,22 +196,24 @@ const game = (function (){
         gameContainer.addEventListener('click',(e)=>{
             let currId =e.target.id
             if(!gameState){
-                gameResult(box)
+               // renderTurn(box)
                 newGame()
                 renderScores()
                 }
             if(currId!='' && gameState && gameReady){
+                //renderTurn(box)
                 coordinates=currId.split('')
                 game.playTurn(coordinates[0],coordinates[1])
 
             }
+            renderTurn(box)
             gameReady=true
             
         })
 
     }
 
-    return {gameLoop, newGame,playTurn,player1}
+    return {newGame,playTurn}
 })();
 
 
