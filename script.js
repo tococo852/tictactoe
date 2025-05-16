@@ -1,4 +1,4 @@
-function createPlayer(name,symbol,symbolSVG){
+function createPlayer(name,color,symbol,symbolSVG){
     let wins=0;
     let ties=0;
     let losses=0;
@@ -12,7 +12,8 @@ function createPlayer(name,symbol,symbolSVG){
     const increaseLosses= () =>{losses++}
     const getLosses= () => {return losses}
     const getTotalGames = () =>{return losses+wins+wins}
-    return {increaseWins,getWins,increaseTies,getTies,increaseLosses,getLosses,getTotalGames,getName,getSymbol,getSymbolSVG}
+    const getColor =()=>{ return color}
+    return {getColor,increaseWins,getWins,increaseTies,getTies,increaseLosses,getLosses,getTotalGames,getName,getSymbol,getSymbolSVG}
 }
 
 const gameBoard = (function(){
@@ -110,8 +111,8 @@ const game = (function (){
     <path d="M0 14.545L1.455 16 8 9.455 14.545 16 16 14.545 9.455 8 16 1.455 14.545 0 8 6.545 1.455 0 0 1.455 6.545 8z" fill-rule="evenodd"/></svg>`
     let circle=`<svg width="8rem" height="8rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#db4141" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
-    let player1=createPlayer("player1", "O",circle)
-    let player2=createPlayer("player2", "X",cross)
+    let player1=createPlayer("player1",'rgb(219, 65, 65)', "O",circle)
+    let player2=createPlayer("player2",'rgb(65, 65, 219)', "X",cross)
     let currentTurn=0;
     let currentPlayer=player1
     let gameState= true
@@ -148,7 +149,7 @@ const game = (function (){
         tie = false
         gameReady=false
         currentTurn=0
-        currentPlayer=player1
+        currentPlayer=[player1,player2][Math.floor(Math.random()*2)]
         gameBoard.generateBoard()
         gameBoard.renderBoard()
     }
@@ -193,6 +194,7 @@ const game = (function (){
         gameContainer=document.querySelector('.gameArea')
         let box=document.querySelector('.announcementBox')
 
+
         gameContainer.addEventListener('click',(e)=>{
             let currId =e.target.id
             if(!gameState){
@@ -200,13 +202,14 @@ const game = (function (){
                 newGame()
                 renderScores()
                 }
-            if(currId!='' && gameState && gameReady){
+            if(currId!='' && gameState && gameReady && e.target.innerHTML==''){
                 //renderTurn(box)
                 coordinates=currId.split('')
                 game.playTurn(coordinates[0],coordinates[1])
 
             }
             renderTurn(box)
+            gameContainer.style.boxShadow=`0px 0px 50px ${currentPlayer.getColor()}`
             gameReady=true
             
         })

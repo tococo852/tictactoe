@@ -115,6 +115,7 @@
     display: grid;
     grid-template: repeat(3, 1fr) / repeat(3, 1fr) ;
     gap: 1px;
+    box-shadow: 0px 0px 50px rgb(219, 65, 65);
   }
 
   .tile{
